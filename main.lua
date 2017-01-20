@@ -13,20 +13,13 @@ function love.load(arg)
 end
 
 -- DATA -------------------------------------------------
-tilemap_data = require "maps/demoland"
-tilemap = tilemap_data.layers[1]
-objects = tilemap_data.layers[#tilemap_data.layers].objects -- load objects
-print(objects[1].x)
--- load tile images
-local tile_data = tilemap_data.tilesets[1]
-sprite_sheet = love.graphics.newImage("maps/" .. tile_data.image)
-local tile_count = tile_data.tilecount
-tiles = tile_data.tiles
-for i = 1, tile_count do
-	local x = ((i - 1) * 16) % tile_data.imagewidth
-	local y = math.floor((i - 1) * 16 / tile_data.imagewidth) * 16
-	tiles[i].sprite = love.graphics.newQuad(x, y, 16, 16, sprite_sheet:getDimensions())
-end
+tilemaps = {
+	demoland = require "maps/demoland",
+	demoland_house1 = require "maps/demoland_house1",
+}
+tilemap = {}
+tiles = {}
+load_map("demoland_house1") -- [tilemap.lua]
 
 -- player data
 player = {

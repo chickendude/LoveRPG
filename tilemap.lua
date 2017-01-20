@@ -1,5 +1,21 @@
 -- functions to manipulate the tilemap
 
+function load_map(tilemap_name)
+	tilemap_data = tilemaps[tilemap_name]
+	tilemap = tilemap_data.layers[1]
+	objects = tilemap_data.layers[#tilemap_data.layers].objects -- load objects
+	-- load tile images
+	local tile_data = tilemap_data.tilesets[1]
+	local tile_count = tile_data.tilecount
+	tiles = tile_data.tiles
+	sprite_sheet = love.graphics.newImage("maps/" .. tile_data.image)
+	for i = 1, tile_count do
+		local x = ((i - 1) * 16) % tile_data.imagewidth
+		local y = math.floor((i - 1) * 16 / tile_data.imagewidth) * 16
+		tiles[i].sprite = love.graphics.newQuad(x, y, 16, 16, sprite_sheet:getDimensions())
+	end
+end
+
 function draw_map()
 	for y = 0, camera.height / 16 do
 		local tileY = math.floor(camera.y / 16) + y
