@@ -19,7 +19,7 @@ tilemaps = {
 }
 tilemap = {}
 tiles = {}
-load_map("demoland_house1") -- [tilemap.lua]
+load_map("demoland") -- [tilemap.lua]
 
 -- player data
 player = {

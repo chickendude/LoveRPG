@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16" nextobjectid="4">
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="32" columns="8">
   <image source="demo.png" width="128" height="64"/>
   <tile id="0">
@@ -187,5 +187,20 @@
 29,31,31,31,31,31,25,31,31,31,31,31,31,31,31,31,31,31,31,30
 </data>
  </layer>
- <objectgroup name="warps"/>
+ <objectgroup name="warps">
+  <object id="1" name="door_bottom" type="warp" x="96.3333" y="304.333" width="15" height="15">
+   <properties>
+    <property name="map" value="demoland"/>
+    <property name="x" type="int" value="13"/>
+    <property name="y" type="int" value="12"/>
+   </properties>
+  </object>
+  <object id="2" name="door_left" type="warp" x="0" y="144.333" width="15.3333" height="15">
+   <properties>
+    <property name="map" value="demoland"/>
+    <property name="x" type="int" value="11"/>
+    <property name="y" type="int" value="11"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

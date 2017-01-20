@@ -8,7 +8,7 @@ return {
   height = 20,
   tilewidth = 16,
   tileheight = 16,
-  nextobjectid = 1,
+  nextobjectid = 4,
   properties = {},
   tilesets = {
     {
@@ -275,7 +275,42 @@ return {
       offsety = 0,
       draworder = "topdown",
       properties = {},
-      objects = {}
+      objects = {
+        {
+          id = 1,
+          name = "door_bottom",
+          type = "warp",
+          shape = "rectangle",
+          x = 96.3333,
+          y = 304.333,
+          width = 15,
+          height = 15,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["map"] = "demoland",
+            ["x"] = 13,
+            ["y"] = 12
+          }
+        },
+        {
+          id = 2,
+          name = "door_left",
+          type = "warp",
+          shape = "rectangle",
+          x = 0,
+          y = 144.333,
+          width = 15.3333,
+          height = 15,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["map"] = "demoland",
+            ["x"] = 11,
+            ["y"] = 11
+          }
+        }
+      }
     }
   }
 }

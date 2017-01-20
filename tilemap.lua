@@ -46,6 +46,7 @@ end
 
 function move_down(speed)
 	player.direction = "down"
+	check_action(player.x, player.y + speed)
 	if check_passable(player.x + player.overlapX, player.y + player.height + speed) and
 			check_passable(player.x + player.width - player.overlapX - 1, player.y + player.height + speed) then
 		player.y = math.min(player.y + speed, tilemap.height * 16 - player.height)
@@ -55,6 +56,7 @@ function move_down(speed)
 end
 
 function move_left(speed)
+	check_action(player.x - speed, player.y)
 	player.direction = "left"
 	if check_passable(player.x + player.overlapX - speed, player.y + player.overlapY + 1) and
 			check_passable(player.x + player.overlapX - speed, player.y + player.height - 1) then
@@ -65,6 +67,7 @@ function move_left(speed)
 end
 
 function move_right(speed)
+	check_action(player.x + speed, player.y)
 	player.direction = "right"
 	if check_passable(player.x + player.width - player.overlapX + speed, player.y + player.overlapY + 1) and
 			check_passable(player.x + player.width - player.overlapX + speed, player.y + player.height - 1) then
@@ -98,6 +101,7 @@ function check_action(x, y)
 	x = x + player.overlapX
 	local width = player.width - player.overlapX * 2
 	local height = player.height - player.overlapY
+	print("size: " .. #objects)
 	for i = 1, #objects do
 		local x2 = objects[i].x
 		local y2 = objects[i].y
@@ -108,7 +112,14 @@ function check_action(x, y)
 				x2 < x + width and
 				y < y2 + h2 and
 				y2 < y + height then
-			print(objects[i].name)
+
+			if objects[i].type == "warp" then
+				player.x = objects[i].properties["x"] * 16
+				player.y = objects[i].properties["y"] * 16 - 8
+				load_map(objects[i].properties["map"])
+--				print(objects[i].properties["map"])
+				return
+			end
 		end
 	end
 end
