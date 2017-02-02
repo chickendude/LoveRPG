@@ -17,7 +17,9 @@ tilemaps = {
 	demoland = require "maps/demoland",
 	demoland_house1 = require "maps/demoland_house1",
 }
-tilemap = {}
+tilemap = {
+	layer = {}
+}
 tiles = {}
 load_map("demoland") -- [tilemap.lua]
 
@@ -56,6 +58,7 @@ keys_pressed = {}
 function love.draw()
 	draw_map() -- [tilemap.lua]
 	draw_objects() -- [objects]
+	draw_map_foreground() -- [tilemap.lua]
 end
 
 function love.update(dt)

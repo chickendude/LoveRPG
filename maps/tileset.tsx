@@ -83,17 +83,17 @@
  </tile>
  <tile id="16">
   <properties>
-   <property name="passable" type="bool" value="false"/>
+   <property name="passable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="17">
   <properties>
-   <property name="passable" type="bool" value="false"/>
+   <property name="passable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="18">
   <properties>
-   <property name="passable" type="bool" value="false"/>
+   <property name="passable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="19">

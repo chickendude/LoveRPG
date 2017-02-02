@@ -2,7 +2,12 @@
 
 function load_map(tilemap_name)
 	tilemap_data = tilemaps[tilemap_name]
-	tilemap = tilemap_data.layers[1]
+
+	tilemap.width = tilemap_data.layers[1].width
+	tilemap.height = tilemap_data.layers[1].height
+	for i = 1, #tilemap_data.layers - 1 do
+		tilemap.layer[i] = tilemap_data.layers[i]
+	end
 	objects = tilemap_data.layers[#tilemap_data.layers].objects -- load objects
 	-- load tile images
 	local tile_data = tilemap_data.tilesets[1]
@@ -16,7 +21,7 @@ function load_map(tilemap_name)
 	end
 end
 
-function draw_map()
+function draw_map_layer(layer)
 	for y = 0, camera.height / 16 do
 		local tileY = math.floor(camera.y / 16) + y
 		local screenY = y * 16 - (camera.y % 16)
@@ -24,7 +29,7 @@ function draw_map()
 			local tileX = math.floor(camera.x / 16) + x
 			local screenX = x * 16 - camera.x % 16
 			-- load tile from tilemap data, add one because lua starts indices at 1 (-_-)
-			local tile_id = tilemap.data[(tileY * tilemap.width + tileX) + 1]
+			local tile_id = tilemap.layer[layer].data[(tileY * tilemap.width + tileX) + 1]
 			if tiles[tile_id] ~= nil then
 				local tile = tiles[tile_id].sprite
 				love.graphics.draw(sprite_sheet, tile, screenX, screenY)
@@ -32,6 +37,21 @@ function draw_map()
 		end
 	end
 end
+
+function draw_map()
+	for i = 1, #tilemap.layer do
+		if tilemap.layer[i].name ~= "foreground" then
+			draw_map_layer(i)
+		end
+	end
+end
+
+function draw_map_foreground()
+	if tilemap.layer[#tilemap.layer].name == "foreground" then
+		draw_map_layer(#tilemap.layer)
+	end
+end
+
 
 function move_up(speed)
 	player.direction = "up"
@@ -89,11 +109,17 @@ end
 function check_passable(x, y)
 	y = math.floor(y / 16)
 	x = math.floor(x / 16) + 1 -- because indices start at 1 *facepalm*
-	local tile_id = tilemap.data[y * tilemap.width + x]
-	if (tile_id ~= nil) then
-		return tiles[tile_id].properties["passable"]
+
+	passable = true
+	for i = 1, #tilemap.layer do
+		local tile_id = tilemap.layer[i].data[y * tilemap.width + x]
+		if (tile_id ~= nil and tile_id ~= 0) then
+			if not tiles[tile_id].properties["passable"] then
+				passable = false
+			end
+		end
 	end
-	return false
+	return passable
 end
 
 function check_action(x, y)
@@ -101,7 +127,6 @@ function check_action(x, y)
 	x = x + player.overlapX
 	local width = player.width - player.overlapX * 2
 	local height = player.height - player.overlapY
-	print("size: " .. #objects)
 	for i = 1, #objects do
 		local x2 = objects[i].x
 		local y2 = objects[i].y
@@ -117,7 +142,6 @@ function check_action(x, y)
 				player.x = objects[i].properties["x"] * 16
 				player.y = objects[i].properties["y"] * 16 - 8
 				load_map(objects[i].properties["map"])
---				print(objects[i].properties["map"])
 				return
 			end
 		end
