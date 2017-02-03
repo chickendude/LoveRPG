@@ -1,6 +1,8 @@
 -- functions to manipulate the tilemap
 
 function load_map(tilemap_name)
+	reset_map_defaults()
+
 	tilemap_data = tilemaps[tilemap_name]
 
 	tilemap.width = tilemap_data.layers[1].width
@@ -138,6 +140,7 @@ function check_passable(x, y)
 
 	passable = true
 	for i = 1, #tilemap.layer do
+		print(i)
 		local tile_id = tilemap.layer[i].data[y * tilemap.width + x]
 		if (tile_id ~= nil and tile_id ~= 0) then
 			if not tiles[tile_id].properties["passable"] then
@@ -172,4 +175,18 @@ function check_action(x, y)
 			end
 		end
 	end
+end
+
+function reset_map_defaults()
+	tilemap = {
+		layer = {}
+	}
+	tiles = {}
+	objects = {}
+	npcs = {
+		sprites = {},
+		sprite_sheet = "",
+		list = {},
+	}
+	actions = {}
 end

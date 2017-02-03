@@ -17,17 +17,7 @@ tilemaps = {
 	demoland = require "maps/demoland",
 	demoland_house1 = require "maps/demoland_house1",
 }
-tilemap = {
-	layer = {}
-}
-tiles = {}
-objects = {}
-npcs = {
-	sprites = {},
-	sprite_sheet = "",
-	list = {},
-	}
-actions = {}
+reset_map_defaults() -- [tilemap.lua]
 load_map("demoland") -- [tilemap.lua]
 
 -- player data

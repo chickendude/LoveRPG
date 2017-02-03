@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" nextobjectid="66">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" nextobjectid="73">
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="32" columns="8">
   <image source="demo.png" width="128" height="64"/>
   <tile id="0">
@@ -430,7 +430,16 @@
   </object>
  </objectgroup>
  <objectgroup name="npcs">
-  <object id="64" gid="41" x="318" y="206" width="16" height="24"/>
-  <object id="65" gid="33" x="353" y="208" width="16" height="24"/>
+  <object id="64" gid="41" x="328" y="208" width="16" height="24"/>
+  <object id="65" gid="33" x="344" y="208" width="16" height="24"/>
+ </objectgroup>
+ <objectgroup name="objects">
+  <object id="66" gid="11" x="279" y="231" width="16" height="16"/>
+  <object id="67" gid="11" x="293" y="239" width="16" height="16"/>
+  <object id="68" gid="11" x="304" y="243" width="16" height="16"/>
+  <object id="69" gid="11" x="313" y="239" width="16" height="16"/>
+  <object id="70" gid="11" x="317" y="226" width="16" height="16"/>
+  <object id="71" gid="11" x="304" y="221" width="16" height="16"/>
+  <object id="72" gid="11" x="292" y="219" width="16" height="16"/>
  </objectgroup>
 </map>

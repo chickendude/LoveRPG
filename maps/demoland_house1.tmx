@@ -187,7 +187,7 @@
 29,31,31,31,31,31,25,31,31,31,31,31,31,31,31,31,31,31,31,30
 </data>
  </layer>
- <objectgroup name="warps">
+ <objectgroup name="actions">
   <object id="1" name="door_bottom" type="warp" x="96.3333" y="304.333" width="15" height="15">
    <properties>
     <property name="map" value="demoland"/>

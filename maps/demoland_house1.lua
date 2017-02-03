@@ -232,7 +232,7 @@ return {
   layers = {
     {
       type = "tilelayer",
-      name = "Tile Layer 1",
+      name = "ground",
       x = 0,
       y = 0,
       width = 20,
@@ -268,7 +268,7 @@ return {
     },
     {
       type = "objectgroup",
-      name = "warps",
+      name = "actions",
       visible = true,
       opacity = 1,
       offsetx = 0,
