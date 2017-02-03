@@ -5,20 +5,46 @@ function load_map(tilemap_name)
 
 	tilemap.width = tilemap_data.layers[1].width
 	tilemap.height = tilemap_data.layers[1].height
-	for i = 1, #tilemap_data.layers - 1 do
-		tilemap.layer[i] = tilemap_data.layers[i]
+	for i = 1, #tilemap_data.layers do
+		local type = tilemap_data.layers[i].name
+		if type == "actions" then
+			actions = tilemap_data.layers[i].objects -- load map actions
+		elseif type == "objects" then
+			objects = tilemap_data.layers[i].objects -- load objects
+		elseif type == "npcs" then
+			npcs.list = tilemap_data.layers[i].objects -- load npcs
+		else
+			tilemap.layer[i] = tilemap_data.layers[i]
+		end
 	end
-	objects = tilemap_data.layers[#tilemap_data.layers].objects -- load objects
-	-- load tile images
-	local tile_data = tilemap_data.tilesets[1]
+
+	-- load tile and npc sprites
+	for i = 1, #tilemap_data.tilesets do
+		local tileset = tilemap_data.tilesets[i]
+		local results = get_sprites_from_spritesheet(tileset)
+		if tileset.name == "tileset" then
+			tiles = results[1]
+			sprite_sheet = results[2]
+		elseif tileset.name == "NPCs" then
+			npcs.sprites = results[1]
+			npcs.sprite_sheet = results[2]
+			npcs.sprite_first_gid = tileset.firstgid
+		end
+	end
+end
+
+function get_sprites_from_spritesheet(tile_data)
 	local tile_count = tile_data.tilecount
-	tiles = tile_data.tiles
-	sprite_sheet = love.graphics.newImage("maps/" .. tile_data.image)
+	local w = tile_data.grid.width
+	local h = tile_data.grid.height
+	local tile_list = tile_data.tiles
+	local sprite_sheet = love.graphics.newImage("maps/" .. tile_data.image)
 	for i = 1, tile_count do
-		local x = ((i - 1) * 16) % tile_data.imagewidth
-		local y = math.floor((i - 1) * 16 / tile_data.imagewidth) * 16
-		tiles[i].sprite = love.graphics.newQuad(x, y, 16, 16, sprite_sheet:getDimensions())
+		local x = ((i - 1) * w) % tile_data.imagewidth
+		local y = math.floor((i - 1) * h / tile_data.imagewidth) * h
+		tile_list[i].sprite = love.graphics.newQuad(x, y, w, h, sprite_sheet:getDimensions())
 	end
+	return { tile_list, sprite_sheet }
 end
 
 function draw_map_layer(layer)
@@ -127,21 +153,21 @@ function check_action(x, y)
 	x = x + player.overlapX
 	local width = player.width - player.overlapX * 2
 	local height = player.height - player.overlapY
-	for i = 1, #objects do
-		local x2 = objects[i].x
-		local y2 = objects[i].y
-		local w2 = objects[i].width
-		local h2 = objects[i].height
+	for i = 1, #actions do
+		local x2 = actions[i].x
+		local y2 = actions[i].y
+		local w2 = actions[i].width
+		local h2 = actions[i].height
 
 		if x < x2 + w2 and
 				x2 < x + width and
 				y < y2 + h2 and
 				y2 < y + height then
 
-			if objects[i].type == "warp" then
-				player.x = objects[i].properties["x"] * 16
-				player.y = objects[i].properties["y"] * 16 - 8
-				load_map(objects[i].properties["map"])
+			if actions[i].type == "warp" then
+				player.x = actions[i].properties["x"] * 16
+				player.y = actions[i].properties["y"] * 16 - 8
+				load_map(actions[i].properties["map"])
 				return
 			end
 		end

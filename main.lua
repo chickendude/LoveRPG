@@ -21,6 +21,13 @@ tilemap = {
 	layer = {}
 }
 tiles = {}
+objects = {}
+npcs = {
+	sprites = {},
+	sprite_sheet = "",
+	list = {},
+	}
+actions = {}
 load_map("demoland") -- [tilemap.lua]
 
 -- player data
@@ -57,6 +64,8 @@ keys_pressed = {}
 -- CODE -------------------------------------------------
 function love.draw()
 	draw_map() -- [tilemap.lua]
+	draw_player() -- [objects]
+	draw_npcs() -- [objects]
 	draw_objects() -- [objects]
 	draw_map_foreground() -- [tilemap.lua]
 end

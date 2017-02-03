@@ -163,7 +163,7 @@
    </properties>
   </tile>
  </tileset>
- <layer name="Tile Layer 1" width="20" height="20">
+ <layer name="ground" width="20" height="20">
   <data encoding="csv">
 28,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,27,
 32,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,32,

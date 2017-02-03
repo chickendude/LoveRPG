@@ -8,7 +8,7 @@ return {
   height = 50,
   tilewidth = 16,
   tileheight = 16,
-  nextobjectid = 12,
+  nextobjectid = 66,
   properties = {},
   tilesets = {
     {
@@ -227,6 +227,127 @@ return {
           }
         }
       }
+    },
+    {
+      name = "NPCs",
+      firstgid = 33,
+      tilewidth = 16,
+      tileheight = 24,
+      spacing = 0,
+      margin = 0,
+      image = "NPCs.png",
+      imagewidth = 128,
+      imageheight = 48,
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 16,
+        height = 24
+      },
+      properties = {},
+      terrains = {},
+      tilecount = 16,
+      tiles = {
+        {
+          id = 0,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 1,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 2,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 3,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 4,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 5,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 6,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 7,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 8,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 9,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 10,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 11,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 12,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 13,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 14,
+          properties = {
+            ["facing"] = "down"
+          }
+        },
+        {
+          id = 15,
+          properties = {
+            ["facing"] = "down"
+          }
+        }
+      }
     }
   },
   layers = {
@@ -430,7 +551,7 @@ return {
     },
     {
       type = "objectgroup",
-      name = "warps",
+      name = "actions",
       visible = true,
       opacity = 1,
       offsetx = 0,
@@ -486,6 +607,46 @@ return {
             ["x"] = 6,
             ["y"] = 18
           }
+        }
+      }
+    },
+    {
+      type = "objectgroup",
+      name = "npcs",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 64,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 318,
+          y = 206,
+          width = 16,
+          height = 24,
+          rotation = 0,
+          gid = 41,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 65,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 353,
+          y = 208,
+          width = 16,
+          height = 24,
+          rotation = 0,
+          gid = 33,
+          visible = true,
+          properties = {}
         }
       }
     }
