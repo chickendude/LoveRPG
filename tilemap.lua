@@ -12,9 +12,18 @@ function load_map(tilemap_name)
 		if type == "actions" then
 			actions = tilemap_data.layers[i].objects -- load map actions
 		elseif type == "objects" then
-			objects = tilemap_data.layers[i].objects -- load objects
+			-- objects and npcs get stored with y pointing to the bottom of the sprite, not the top, so we have to account for this
+			local obj_objects = tilemap_data.layers[i].objects -- load npcs
+			for j = 1, #obj_objects do
+				objects[j] = {}
+				objects[j].x = obj_objects[j].x
+				objects[j].y = obj_objects[j].y - obj_objects[j].height
+				objects[j].width = obj_objects[j].width
+				objects[j].height = obj_objects[j].height
+				objects[j].gid = obj_objects[j].gid
+			end
 		elseif type == "npcs" then
-			npc_objects = tilemap_data.layers[i].objects -- load npcs
+			local npc_objects = tilemap_data.layers[i].objects -- load npcs
 			for j = 1, #npc_objects do
 				npcs.list[j] = {}
 				npcs.list[j].x = npc_objects[j].x
@@ -90,13 +99,12 @@ function draw_map_foreground()
 	end
 end
 
-
 function move_up(speed)
 	player.direction = "up"
 	hbox = get_player_hitbox()
 	hbox.y = hbox.y - speed
 	check_action(player.x, player.y - speed)
-	if check_passable(hbox) and check_npc_collision(hbox) then
+	if check_passable(hbox) then
 		player.y = math.max(player.y - speed, 0)
 	else
 --		player.y = math.floor(player.y)
@@ -108,7 +116,7 @@ function move_down(speed)
 	hbox = get_player_hitbox()
 	hbox.y = hbox.y + speed
 	check_action(player.x, player.y + speed)
-	if check_passable(hbox) and check_npc_collision(hbox) then
+	if check_passable(hbox) then
 		player.y = math.min(player.y + speed, tilemap.height * 16 - player.height)
 	else
 --		player.y = math.floor((player.y + player.height + speed) / 16) * 16 - player.height - 1
@@ -121,7 +129,7 @@ function move_left(speed)
 	hbox = get_player_hitbox()
 	hbox.x = hbox.x - speed
 	check_action(player.x - speed, player.y)
-	if check_passable(hbox) and check_npc_collision(hbox) then
+	if check_passable(hbox) then
 		player.x = math.max(player.x - speed, 0)
 	else
 --		player.x = math.floor((player.x - speed) / 16) * 16 + player.width - player.overlapX
@@ -134,7 +142,7 @@ function move_right(speed)
 	hbox = get_player_hitbox()
 	hbox.x = hbox.x + speed
 	check_action(player.x + speed, player.y)
-	if check_passable(hbox) and check_npc_collision(hbox) then
+	if check_passable(hbox) then
 		player.x = math.min(player.x + speed, tilemap.width * 16 - player.width)
 	else
 --		player.x = math.floor((player.x + speed) / 16) * 16 + player.overlapX - 1
@@ -151,7 +159,7 @@ function update_camera()
 end
 
 function check_passable(hbox)
-	passable = true
+	passable = check_npc_collision(hbox) and check_object_collision(hbox)
 	x1 = math.floor(hbox.x / 16) + 1
 	x2 = math.floor((hbox.x + hbox.w) / 16) + 1
 	y1 = math.floor(hbox.y / 16)
@@ -184,6 +192,17 @@ function check_npc_collision(hbox)
 	for i = 1, #npcs.list do
 		npc = npcs.list[i]
 		if check_collision(hbox.x, hbox.y, hbox.w, hbox.h, npc.x, npc.y + player.overlapY, npc.width, npc.height - player.overlapY) then
+			can_pass = false
+		end
+	end
+	return can_pass
+end
+
+function check_object_collision(hbox)
+	can_pass = true
+	for i = 1, #objects do
+		object = objects[i]
+		if check_collision(hbox.x, hbox.y, hbox.w, hbox.h, object.x, object.y, object.width, object.height) then
 			can_pass = false
 		end
 	end
