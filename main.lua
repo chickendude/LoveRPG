@@ -55,8 +55,6 @@ keys_pressed = {}
 function love.draw()
 	draw_map() -- [tilemap.lua]
 	draw_objects() -- [objects]
-	draw_npcs() -- [objects]
-	draw_player() -- [objects]
 	draw_map_foreground() -- [tilemap.lua]
 end
 
