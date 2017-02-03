@@ -1,17 +1,24 @@
 -- file: text.lua - text routine
 
 
-function put_string (text, x, y , limit, align)
+function draw_text(text, x, y , limit, align)
    align = align or "left"
    love.graphics.printf(text, x, y, limit, align)
 end
 
---
-function draw_box(x, y, width, height, mode, colour)
+function draw_box(x, y, width, height, mode, rgba)
    mode = mode or "fill"
-   colour = colour or {255,255,0,255}
+   rgba = rgba or {255,255,0,255}
    love.graphics.rectangle( mode, x, y, width, height)
 end
 
---function draw_textbox(text, align_h, align_v)
---end
+function draw_dialoguebox(text)
+   local limit = camera.width - 20
+   local width = camera.width - 10
+   local height = 8 * 4
+   local x = 0
+   local y = camera.height - height
+
+   draw_box(x,y,width,height)
+   draw_text(text,x,y,limit)
+end
