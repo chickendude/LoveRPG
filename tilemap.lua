@@ -14,8 +14,14 @@ function load_map(tilemap_name)
 		elseif type == "objects" then
 			objects = tilemap_data.layers[i].objects -- load objects
 		elseif type == "npcs" then
-			npcs.list = tilemap_data.layers[i].objects -- load npcs
-			for j = 1, #npcs.list do
+			npc_objects = tilemap_data.layers[i].objects -- load npcs
+			for j = 1, #npc_objects do
+				npcs.list[j] = {}
+				npcs.list[j].x = npc_objects[j].x
+				npcs.list[j].y = npc_objects[j].y - npc_objects[j].height
+				npcs.list[j].width = npc_objects[j].width
+				npcs.list[j].height = npc_objects[j].height
+				npcs.list[j].gid = npc_objects[j].gid
 				npcs.list[j].velX = 0
 				npcs.list[j].velY = 0
 			end
@@ -87,45 +93,51 @@ end
 
 function move_up(speed)
 	player.direction = "up"
+	hbox = get_player_hitbox()
+	hbox.y = hbox.y - speed
 	check_action(player.x, player.y - speed)
-	if check_passable(player.x + player.overlapX, player.y + player.overlapY - speed) and
-			check_passable(player.x + player.width - player.overlapX - 1, player.y + player.overlapY - speed) then
+	if check_passable(hbox) and check_npc_collision(hbox) then
 		player.y = math.max(player.y - speed, 0)
 	else
-		player.y = math.floor(player.y / 16) * 16 + 16 - player.overlapY
+--		player.y = math.floor(player.y)
 	end
 end
 
 function move_down(speed)
 	player.direction = "down"
+	hbox = get_player_hitbox()
+	hbox.y = hbox.y + speed
 	check_action(player.x, player.y + speed)
-	if check_passable(player.x + player.overlapX, player.y + player.height + speed) and
-			check_passable(player.x + player.width - player.overlapX - 1, player.y + player.height + speed) then
+	if check_passable(hbox) and check_npc_collision(hbox) then
 		player.y = math.min(player.y + speed, tilemap.height * 16 - player.height)
 	else
-		player.y = math.floor((player.y + player.height + speed) / 16) * 16 - player.height
+--		player.y = math.floor((player.y + player.height + speed) / 16) * 16 - player.height - 1
 	end
 end
 
 function move_left(speed)
 	check_action(player.x - speed, player.y)
 	player.direction = "left"
-	if check_passable(player.x + player.overlapX - speed, player.y + player.overlapY + 1) and
-			check_passable(player.x + player.overlapX - speed, player.y + player.height - 1) then
+	hbox = get_player_hitbox()
+	hbox.x = hbox.x - speed
+	check_action(player.x - speed, player.y)
+	if check_passable(hbox) and check_npc_collision(hbox) then
 		player.x = math.max(player.x - speed, 0)
 	else
-		player.x = math.floor((player.x - speed) / 16) * 16 + player.width - player.overlapX
+--		player.x = math.floor((player.x - speed) / 16) * 16 + player.width - player.overlapX
 	end
 end
 
 function move_right(speed)
 	check_action(player.x + speed, player.y)
 	player.direction = "right"
-	if check_passable(player.x + player.width - player.overlapX + speed, player.y + player.overlapY + 1) and
-			check_passable(player.x + player.width - player.overlapX + speed, player.y + player.height - 1) then
+	hbox = get_player_hitbox()
+	hbox.x = hbox.x + speed
+	check_action(player.x + speed, player.y)
+	if check_passable(hbox) and check_npc_collision(hbox) then
 		player.x = math.min(player.x + speed, tilemap.width * 16 - player.width)
 	else
-		player.x = math.floor((player.x + speed) / 16) * 16 + player.overlapX
+--		player.x = math.floor((player.x + speed) / 16) * 16 + player.overlapX - 1
 	end
 end
 
@@ -138,21 +150,44 @@ function update_camera()
 	camera.y = math.floor(camera.y)
 end
 
-function check_passable(x, y)
-	y = math.floor(y / 16)
-	x = math.floor(x / 16) + 1 -- because indices start at 1 *facepalm*
-
+function check_passable(hbox)
 	passable = true
-	for i = 1, #tilemap.layer do
-		print(i)
-		local tile_id = tilemap.layer[i].data[y * tilemap.width + x]
-		if (tile_id ~= nil and tile_id ~= 0) then
-			if not tiles[tile_id].properties["passable"] then
-				passable = false
+	x1 = math.floor(hbox.x / 16) + 1
+	x2 = math.floor((hbox.x + hbox.w) / 16) + 1
+	y1 = math.floor(hbox.y / 16)
+	y2 = math.floor((hbox.y + hbox.h) / 16)
+
+	coords = {
+		{ x = x1, y = y1 },
+		{ x = x2, y = y1 },
+		{ x = x1, y = y2 },
+		{ x = x2, y = y2 },
+	}
+
+	for j = 1, #coords do
+		x = coords[j].x
+		y = coords[j].y
+		for i = 1, #tilemap.layer do
+			local tile_id = tilemap.layer[i].data[y * tilemap.width + x]
+			if (tile_id ~= nil and tile_id ~= 0) then
+				if not tiles[tile_id].properties["passable"] then
+					passable = false
+				end
 			end
 		end
 	end
 	return passable
+end
+
+function check_npc_collision(hbox)
+	can_pass = true
+	for i = 1, #npcs.list do
+		npc = npcs.list[i]
+		if check_collision(hbox.x, hbox.y, hbox.w, hbox.h, npc.x, npc.y + player.overlapY, npc.width, npc.height - player.overlapY) then
+			can_pass = false
+		end
+	end
+	return can_pass
 end
 
 function check_action(x, y)
