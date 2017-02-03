@@ -15,6 +15,10 @@ function load_map(tilemap_name)
 			objects = tilemap_data.layers[i].objects -- load objects
 		elseif type == "npcs" then
 			npcs.list = tilemap_data.layers[i].objects -- load npcs
+			for j = 1, #npcs.list do
+				npcs.list[j].velX = 0
+				npcs.list[j].velY = 0
+			end
 		else
 			tilemap.layer[i] = tilemap_data.layers[i]
 		end
@@ -157,7 +161,7 @@ function check_action(x, y)
 	local width = player.width - player.overlapX * 2
 	local height = player.height - player.overlapY
 	for i = 1, #actions do
-		if check_collision(x,y,width,height, actions[i].x,actions[i].y,actions[i].width,actions[i].height) then
+		if check_collision(x, y, width, height, actions[i].x, actions[i].y, actions[i].width, actions[i].height) then
 			if actions[i].type == "warp" then
 				player.x = actions[i].properties["x"] * 16
 				player.y = actions[i].properties["y"] * 16 - 8
@@ -168,7 +172,7 @@ function check_action(x, y)
 	end
 end
 
-function check_collision(x,y,w,h, x2,y2,w2,h2)
+function check_collision(x, y, w, h, x2, y2, w2, h2)
 	return x < x2 + w2 and
 			x2 < x + w and
 			y < y2 + h2 and
