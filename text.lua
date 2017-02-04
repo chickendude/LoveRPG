@@ -6,10 +6,9 @@ function draw_text(text, x, y , limit, align)
    love.graphics.printf(text, x, y, limit, align)
 end
 
-function draw_box(x, y, width, height, mode, rgba)
+function draw_box(x, y, width, height, mode)
    mode = mode or "fill"
-   rgba = rgba or {255,255,0,255}
-   love.graphics.rectangle( mode, x, y, width, height)
+   love.graphics.rectangle(mode, x, y, width, height)
 end
 
 function draw_dialoguebox(text)
