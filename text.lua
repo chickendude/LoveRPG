@@ -12,12 +12,9 @@ function draw_box(x, y, width, height, mode)
 end
 
 function draw_dialoguebox(text)
-  local limit = camera.width - 20
-  local width = camera.width - 10
-  local height = 8 * 4
-  local x = 0
-  local y = camera.height - height
+  local bh = 8*4
+  local tw = camera.width - 16
 
-  draw_box(x,y,width,height)
-  draw_text(text,x,y,limit)
+  draw_box(0,camera.height - bh ,camera.width, camera.height - bh)
+  draw_text(text, 0, camera.height - bh, tw)
 end
