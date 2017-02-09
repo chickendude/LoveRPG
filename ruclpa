@@ -20,7 +20,9 @@ file="loveRPG.love"
 objects="main.lua
 	tilemap.lua
 	objects.lua
-	tilemap.lua
+	states.lua
+	text.lua
+	font
 	maps"
 
 
@@ -28,7 +30,6 @@ option=${1}
 
 loveit() {
     zip -9 -r $file $objects
-    echo "I was made for loving you..."
 }
 
 case ${option} in
@@ -38,7 +39,7 @@ case ${option} in
 	    love $file
 	    exit 0
 	else
-	    echo "$file was not there: Loving it!"
+	    echo "$file was not there: Packing it!"
 	    loveit
 	    echo "$file is there now: Running!"
 	    love $file
@@ -50,7 +51,7 @@ case ${option} in
     -c)	if [ -e $file ]
 	then
 	    rm $file
-	    echo "Now it's no longer there."
+	    echo "No longer there."
 	    exit 0
 	else
 	    echo "`basename ${0}`: Cannot clean: No $file left."
