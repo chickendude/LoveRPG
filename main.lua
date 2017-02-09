@@ -14,6 +14,7 @@ function love.load(arg)
   love.window.setMode(camera.width, camera.height)
   gbuf = love.graphics.newCanvas(camera.width, camera.height)
   gamestate = gamestates.maingame
+  font = love.graphics.setNewFont('font/LiberationMono-Regular.ttf', 12)
 end
 
 -- DATA -------------------------------------------------
@@ -37,31 +38,43 @@ player = {
 }
 
 -- KEYS -------------------------------------------------
-key_bindings = {
-  quit = function() love.event.quit() end,
-  moveUp = function() move_up(speed) end, -- [tilemap.lua]
-  moveDown = function() move_down(speed) end, -- [tilemap.lua]
-  moveLeft = function() move_left(speed) end, -- [tilemap.lua]
-  moveRight = function() move_right(speed) end, -- [tilemap.lua]
-  openTextBox = function() open_demo_text_box() end -- [text.lua]
-}
 
-key_actions = {
-  escape = "quit",
-  up = "moveUp",
-  down = "moveDown",
-  left = "moveLeft",
-  right = "moveRight",
-  x = "openTextBox",
-}
 
 keys_pressed = {}
 
 gamestates = {
   intro = {},
   menu = {},
-  dialog = {draw = dialog_draw, update = dialog_update},
-  maingame = {draw = maingame_draw, update = maingame_update},
+  dialog = {
+    draw = dialog_draw,
+    update = dialog_update,
+    key_bindings = {
+      quit = function() love.event.quit() end,
+    },
+    key_actions = {
+      escape = "quit",
+    }
+  },
+  maingame = {
+    draw = maingame_draw,
+    update = maingame_update,
+    key_bindings = {
+      quit = function() love.event.quit() end,
+      moveUp = function() move_up(speed) end, -- [tilemap.lua]
+      moveDown = function() move_down(speed) end, -- [tilemap.lua]
+      moveLeft = function() move_left(speed) end, -- [tilemap.lua]
+      moveRight = function() move_right(speed) end, -- [tilemap.lua]
+      openTextBox = function() open_demo_text_box() end -- [text.lua]
+    },
+    key_actions = {
+      escape = "quit",
+      up = "moveUp",
+      down = "moveDown",
+      left = "moveLeft",
+      right = "moveRight",
+      x = "openTextBox",
+    }
+  },
 }
 
 -- CODE -------------------------------------------------
@@ -75,16 +88,17 @@ end
 
 function love.update(dt)
   gamestate.update(dt)
+  check_keys(dt)
 end
 
 function love.keypressed(key)
-  if key_actions[key] ~= nil then
+  if gamestate.key_actions[key] ~= nil then
     keys_pressed[key] = true
   end
 end
 
 function love.keyreleased(key)
-  if key_actions[key] ~= nil then
+  if gamestate.key_actions[key] ~= nil then
     keys_pressed[key] = false
   end
 end
@@ -92,14 +106,14 @@ end
 function check_keys(speed)
   for key, is_pressed in pairs(keys_pressed) do
     if is_pressed then
-      local key_binding = key_actions[key]
+      local key_binding = gamestate.key_actions[key]
       handle_input(key_binding, speed)
     end
   end
 end
 
 function handle_input(key_binding, speed)
-  local action = key_bindings[key_binding]
+  local action = gamestate.key_bindings[key_binding]
   if action then
     return action(speed)
   end

@@ -7,16 +7,16 @@ end
 
 function maingame_update(dt)
   speed = 200 * dt
-  check_keys(speed)
   update_camera() -- [tilemap.lua]
 end
 
 -- DIALOG
-dialog_text = ''
 function dialog_draw()
-  draw_dialoguebox(dialog_text)
+  if dialog_timer <= 0 then
+    draw_dialog_text() -- [text.lua]
+  end
 end
 
-function dialog_update()
-
+function dialog_update(dt)
+  dialog_update_timer(dt) -- [text.lua]
 end
