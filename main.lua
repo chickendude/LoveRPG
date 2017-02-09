@@ -1,5 +1,7 @@
 require "tilemap"
+require "text"
 require "objects"
+require "states"
 
 -- INIT
 camera = {}
@@ -10,6 +12,8 @@ function love.load(arg)
   camera.width = 16 * 20
   camera.height = 16 * 16
   love.window.setMode(camera.width, camera.height)
+  gbuf = love.graphics.newCanvas(camera.width, camera.height)
+  gamestate = gamestates.maingame
 end
 
 -- DATA -------------------------------------------------
@@ -39,6 +43,7 @@ key_bindings = {
   moveDown = function() move_down(speed) end, -- [tilemap.lua]
   moveLeft = function() move_left(speed) end, -- [tilemap.lua]
   moveRight = function() move_right(speed) end, -- [tilemap.lua]
+  openTextBox = function() open_demo_text_box() end -- [text.lua]
 }
 
 key_actions = {
@@ -47,21 +52,30 @@ key_actions = {
   down = "moveDown",
   left = "moveLeft",
   right = "moveRight",
+  x = "openTextBox",
 }
 
 keys_pressed = {}
 
+gamestates = {
+  intro = {},
+  menu = {},
+  dialog = {draw = dialog_draw, update = dialog_update},
+  maingame = {draw = maingame_draw, update = maingame_update},
+}
+
 -- CODE -------------------------------------------------
 function love.draw()
-  draw_map() -- [tilemap.lua]
-  draw_objects() -- [objects]
-  draw_map_foreground() -- [tilemap.lua]
+  gbuf:renderTo(function()
+    gamestate.draw()
+  end)
+
+  love.graphics.setColor(255, 255, 255);
+  love.graphics.draw(gbuf)
 end
 
 function love.update(dt)
-  speed = 200 * dt
-  check_keys(speed)
-  update_camera() -- [tilemap.lua]
+  gamestate.update(dt)
 end
 
 function love.keypressed(key)
