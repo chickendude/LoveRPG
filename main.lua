@@ -69,7 +69,6 @@ function love.draw()
   gbuf:renderTo(function()
     gamestate.draw()
   end)
-
   love.graphics.setColor(255, 255, 255);
   love.graphics.draw(gbuf)
 end

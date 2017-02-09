@@ -18,5 +18,5 @@ function dialog_draw()
 end
 
 function dialog_update()
-  a = 1
+
 end
