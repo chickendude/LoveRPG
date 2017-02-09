@@ -68,6 +68,8 @@ function dialog_update_timer(dt)
 end
 
 function prepare_dialog(text)
+  text_index = 1
+  text_row = 0
   keys_pressed["x"] = false
   dialog_typing = true -- if we should use typing effect or not
   dialog_waiting = false -- if we need user to press a key to continue
