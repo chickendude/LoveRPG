@@ -50,9 +50,13 @@ gamestates = {
     update = dialog_update,
     key_bindings = {
       quit = function() love.event.quit() end,
+      confirm = function() dialog_confirm() end,
+      cancel = function() dialog_cancel() end,
     },
     key_actions = {
       escape = "quit",
+      x = "confirm",
+      z = "cancel",
     }
   },
   maingame = {
