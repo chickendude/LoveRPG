@@ -18,10 +18,7 @@
 
 file="loveRPG.love"
 objects="main.lua
-	tilemap.lua
-	objects.lua
-	states.lua
-	text.lua
+	src
 	font
 	maps"
 

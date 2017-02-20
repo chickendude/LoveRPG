@@ -1,7 +1,7 @@
-require "tilemap"
-require "text"
-require "objects"
-require "states"
+require "src.tilemap"
+require "src.text"
+require "src.objects"
+require "src.states"
 
 -- INIT
 camera = {}
