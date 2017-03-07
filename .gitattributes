@@ -1,0 +1,5 @@
+*.gitattributes text
+.gitignore text
+*.md text
+
+*.lua text
