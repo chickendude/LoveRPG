@@ -1,4 +1,6 @@
 -- file: text.lua - text routine
+dialog_typing = false
+dialog_waiting = false
 
 function open_demo_text_box()
   prepare_dialog("Hello! Welcome to the dark side of the moon! I hope you enjoy your stay here, i'm a little busy now but i will return to show you around later! Cya around!\n\n\n... are you still here?")
@@ -29,13 +31,6 @@ function draw_dialoguebox_letter(letter, col, row)
   local x = col * 7
   local y = row * 12
   draw_text(letter, 4 + x, 6 + camera.height - box_h + y)
-end
-
-function draw_menubox(menu)
-  menu = menu or " "
-  local colour = { 0, 0, 0, 255 }
-  local mbw = 8 * 16
-  draw_box(camera.width - mbw, mbw, camera.height, colour)
 end
 
 dialog_text = ""
@@ -81,6 +76,7 @@ end
 function dialog_confirm()
   keys_pressed["x"] = false
   if dialog_waiting == true then
+    -- if less than three then we have no text left to display
     if #dialog_text <= 3 then
       gamestate = gamestates.maingame
     else

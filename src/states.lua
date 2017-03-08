@@ -20,3 +20,11 @@ end
 function dialog_update(dt)
   dialog_update_timer(dt) -- [text.lua]
 end
+
+-- MENU
+function menu_draw()
+  draw_menu()
+end
+
+function menu_update(dt)
+end

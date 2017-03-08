@@ -2,9 +2,11 @@ require "src.tilemap"
 require "src.text"
 require "src.objects"
 require "src.states"
+require "src.menu"
 
 -- INIT
 camera = {}
+gamestate = nil
 function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end
   camera.x = 0
@@ -25,6 +27,9 @@ tilemaps = {
 reset_map_defaults() -- [tilemap.lua]
 load_map("demoland") -- [tilemap.lua]
 
+-- menu
+menu_options = {"Items", "Equipment", "Stats", "Exit"}
+
 -- player data
 player = {
   x = 3 * 16,
@@ -38,13 +43,22 @@ player = {
 }
 
 -- KEYS -------------------------------------------------
-
-
 keys_pressed = {}
 
 gamestates = {
   intro = {},
-  menu = {},
+  menu = {
+    draw = menu_draw,
+    update = menu_update,
+    key_bindings = {
+      quit = function() love.event.quit() end,
+      quitMenu = function() quit_menu() end,
+    },
+    key_actions = {
+      escape = "quit",
+      z = "quitMenu",
+    }
+  },
   dialog = {
     draw = dialog_draw,
     update = dialog_update,
@@ -68,7 +82,8 @@ gamestates = {
       moveDown = function() move_down(speed) end, -- [tilemap.lua]
       moveLeft = function() move_left(speed) end, -- [tilemap.lua]
       moveRight = function() move_right(speed) end, -- [tilemap.lua]
-      openTextBox = function() open_demo_text_box() end -- [text.lua]
+      openTextBox = function() open_demo_text_box() end, -- [text.lua]
+      openMenu = function() open_menu() end, -- [menu.lua]
     },
     key_actions = {
       escape = "quit",
@@ -77,6 +92,7 @@ gamestates = {
       left = "moveLeft",
       right = "moveRight",
       x = "openTextBox",
+      ["return"] = "openMenu",
     }
   },
 }
@@ -102,7 +118,7 @@ function love.keypressed(key)
 end
 
 function love.keyreleased(key)
-  if gamestate.key_actions[key] ~= nil then
+  if keys_pressed[key] ~= nil then
     keys_pressed[key] = false
   end
 end
